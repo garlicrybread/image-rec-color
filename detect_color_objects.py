@@ -5,14 +5,12 @@ import numpy as np
 import datetime
 
 
-
-def detect_objects(self):
+def detect_objects(fruit_number):
     # take picture from webcam
     now = datetime.datetime.now()
-    file_name = now.strftime("%Y-%m-%d")
+    # file_name = now.strftime("%Y-%m-%d")
     img = cv2.imread(str(take_picture(file_name)), 1)
-
-    img=cv2.resize(img, (340, 220))
+    # img = cv2.imread("/home/Documents/2018-01-27.png", 1)
     imgHSV= cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     # Find the red apple
@@ -32,24 +30,40 @@ def detect_objects(self):
     upper_range_pear = np.array([50, 200, 255], dtype=np.uint8)
     green = [74, 111, 55]
 
-    # Draw box around the element
-    center_of_apple = find_element_within_range(img, imgHSV, lower_range_apple, upper_range_apple,red)
-    # cv2.imshow('image', img)
-    # cv2.waitKey(0)
-    #
-    center_of_orange = find_element_within_range(img, imgHSV, lower_range_orange, upper_range_orange, orange)
-    # cv2.imshow('image', img)
-    # cv2.waitKey(0)
-    #
-    center_of_banana = find_element_within_range(img, imgHSV, lower_range_banana, upper_range_banana, yellow)
-    # cv2.imshow('image', img)
-    # cv2.waitKey(0)
-    center_of_pear = find_element_within_range(img, imgHSV, lower_range_pear, upper_range_pear, green)
+
+    def apple():
+        center_of_apple = find_element_within_range(img, imgHSV, lower_range_apple, upper_range_apple,red)
+        print "You asked for an apple.\n"
+        return center_of_apple
+
+    def orange():
+        center_of_orange = find_element_within_range(img, imgHSV, lower_range_orange, upper_range_orange, orange)
+        print "n is a perfect square\n"
+        return center_of_orange
+
+    def banana():
+        center_of_banana = find_element_within_range(img, imgHSV, lower_range_banana, upper_range_banana, yellow)
+        print "n is an even number\n"
+        return center_of_banana
+
+    def pear():
+        center_of_pear = find_element_within_range(img, imgHSV, lower_range_pear, upper_range_pear, green)
+        print "n is a prime number\n"
+        return center_of_pear
+
+    # map the inputs to the function blocks
+    fruits = {0 : apple,
+               1 : banana,
+               2 : orange,
+               3 : pear,
+    }
+
+    desired_fruit_location = fruits[fruit_number]()
 
     cv2.imshow('image', img)
     cv2.waitKey(0)
     
-    return desired_fruit
+    return desired_fruit_location
 
 
 def find_element_within_range(image, imgHSV, lower_range, upper_range, color):
@@ -86,6 +100,7 @@ def find_element_within_range(image, imgHSV, lower_range, upper_range, color):
 
     return center
 
+
 def take_picture(file_name):
     # Camera 0 is the camera on the arm
     camera_port = 0
@@ -121,3 +136,6 @@ def take_picture(file_name):
     # # capture object until your script exits
     # del camera
     return path_to_file
+
+
+detect_objects(1)
